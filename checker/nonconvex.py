@@ -12,6 +12,7 @@ Results checked here:
   C5-033, C5-095: Rim fires on the code itself.
   C5-085: Rim fires on the code of (U2, U3, U4, U5, U6, U1∩U4), which any drawing of C5-085 would draw.
   C5-053, C5-072, C5-076: Six-Role Wall fires and FFD bound is 2, so they are not convex in any dimension.
+  C5-087: two-shadow rule (notch.py); C5-013: twin-exit rule (notch.py). Proofs in docs/proofs.md sections 4-5.
 Controls: none of the rules may fire on any code with a drawing in data/certificates
 (the Six-Role Wall is also checked against every code drawn in the plane).
 """
@@ -20,13 +21,14 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from rim import rim
 from sixrole import wall
 from ffd import bound
+import notch
 
 DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data")
 codes = {c["id"]: [frozenset(w) for w in c["codewords"]] + [frozenset()]
          for c in json.load(open(os.path.join(DATA, "codes.json")))["codes"]}
 certs = os.listdir(os.path.join(DATA, "certificates"))
 drawn = {f.split("_")[0].replace(".json", "") for f in certs}
-planar = {f.replace(".json", "").replace("_D8", "") for f in certs if "_3D" not in f}
+planar = {f.replace(".json", "").replace("_D8", "") for f in certs if "_3D" not in f and "_4D" not in f}
 
 def image_085():
     c = codes["C5-085"]
@@ -46,6 +48,10 @@ h = rim(image_085()); report(f"C5-085: Rim rule fires on the image {h[0] if h el
 for cid in ("C5-053", "C5-072", "C5-076"):
     w = wall(codes[cid]); d, base = bound(codes[cid])
     report(f"{cid}: Six-Role Wall fires {w[0] if w else ''}; FFD bound {d} from base {base}", bool(w) and d == 2)
+ts = notch.scan(notch.rule_TS); te = notch.scan(notch.rule_TE)
+report("C5-087: two-shadow rule fires", "C5-087" in ts)
+report("C5-013: twin-exit rule fires", "C5-013" in te)
+report(f"controls: two-shadow and twin-exit silent on all {len(drawn)} drawn codes", not (set(ts) | set(te)) & drawn)
 report(f"controls: Rim silent on all {len(drawn)} drawn codes", not any(rim(codes[c]) for c in drawn))
 report(f"controls: Six-Role Wall silent on all {len(planar)} codes drawn in the plane", not any(wall(codes[c]) for c in planar))
 print("\nall checks passed" if ok else "\nSOME CHECKS FAILED")
