@@ -55,4 +55,6 @@ Fifteen codes resist both drawing and every known non-convexity test (local obst
 
 Results fingerprint (Nov 7, 2026 bundle): `sha256 3bce792c2f3a20317ebd07bfb4aa7b0a29128851686689bd8930d6ba9c699c5f`
 
+Claude (Anthropic's AI) helped me set up this repo and with some of the analysis. I checked every result myself, and every drawing passes the exact checker above.
+
 Zaid Mohammed

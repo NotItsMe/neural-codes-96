@@ -50,6 +50,11 @@ aside{border-right:1px solid var(--line);display:flex;flex-direction:column;min-
 #maptip{position:absolute;left:18px;top:14px;font-size:12.5px;color:var(--muted);max-width:560px;line-height:1.45}
 #tip{position:absolute;pointer-events:none;background:#0B0F17EE;border:1px solid #374151;border-radius:6px;padding:3px 8px;font-size:12.5px;display:none;white-space:nowrap}
 #hint{position:absolute;right:14px;bottom:10px;font-size:11.5px;color:var(--dim)}
+#viewbtns{position:absolute;right:14px;top:12px;display:flex;gap:6px;z-index:4}
+#viewbtns button{background:#0F1520;border:1px solid #374151;border-radius:8px;color:#E5E7EB;min-width:36px;height:32px;padding:0 10px;cursor:pointer;font-size:14px}
+#viewbtns button:hover{border-color:#22D3EE}
+#viewbtns button.on{border-color:#22D3EE;color:#22D3EE}
+@media (max-width:760px){#viewbtns{top:auto;bottom:34px;right:10px}}
 #bar{border-top:1px solid var(--line);padding:12px 20px 14px;background:var(--panel);overflow:auto;max-height:46vh}
 .title2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .title2 h2{font-size:17px;margin:0}
@@ -108,7 +113,8 @@ ul.tried,ol.proof{margin:6px 0 2px 0;padding-left:20px;font-size:13px;line-heigh
       <select id="mobilePick"></select>
       <div id="mapwrap"><div id="maptip"></div><svg id="map"></svg></div>
       <div id="tip"></div>
-      <div id="hint">drag to spin any direction · right-drag to move · scroll to zoom · click a region or a codeword chip · click empty space to clear</div>
+      <div id="viewbtns"><button data-r="left" title="Turn left">⟲</button><button data-r="right" title="Turn right">⟳</button><button data-r="up" title="Look from above">↑</button><button data-r="down" title="Look from below">↓</button><button data-r="spin" id="spinBtn" title="Auto-spin on/off">Spin</button><button data-r="reset" title="Reset view">Reset</button></div>
+      <div id="hint">drag to turn it any way · scroll to zoom · right-drag to slide · click a region or a codeword chip to light it up</div>
     </div>
     <div id="bar"></div>
   </div>
@@ -178,8 +184,8 @@ const sun = new THREE.DirectionalLight(0xffffff,1.0); sun.position.set(6,10,8); 
 const grid = new THREE.GridHelper(16, 32, 0x334155, 0x1e293b); scene.add(grid);
 const controls = new TrackballControls(cam, renderer.domElement);
 controls.rotateSpeed = 3; controls.zoomSpeed = 1.2; controls.panSpeed = .6; controls.dynamicDampingFactor = .15;
-let spin = true;
-controls.addEventListener('start', ()=>{ spin=false; });
+let spin = true; const spinBtn = ()=>document.getElementById('spinBtn');
+controls.addEventListener('start', ()=>{ spin=false; spinBtn()?.classList.remove('on'); });
 let world = new THREE.Group(); scene.add(world);
 let regionObjs = {}, hlObj = null, witnessObj = null, model = null; // model: {code, dim, toWorld}
 
@@ -232,6 +238,7 @@ function buildModel(code){
   else { holder.position.y=size.y*scale/2+.05; cam.position.set(7,5.4,7.6); controls.target.set(0,size.y*scale/2,0); }
   controls.update();
   model={code,dim,inner,holder};
+  homeView={pos:cam.position.clone(), up:cam.up.clone(), target:controls.target.clone(), rotY:holder.rotation.y};
 }
 
 /* point -> codeword (exact test against the inequalities, in drawing coordinates) */
@@ -310,6 +317,21 @@ renderer.domElement.addEventListener('pointerup', e=>{
 });
 
 let hidden=new Set();
+function rotateView(axis, ang){
+  const off = cam.position.clone().sub(controls.target);
+  if(axis==='y') off.applyAxisAngle(cam.up, ang);
+  else { const right = new THREE.Vector3().crossVectors(cam.up, off).normalize(); off.applyAxisAngle(right, ang); cam.up.applyAxisAngle(right, ang); }
+  cam.position.copy(controls.target).add(off); cam.lookAt(controls.target);
+}
+let homeView=null;
+document.getElementById('viewbtns').onclick = e=>{
+  const b=e.target.closest('button'); if(!b||!model) return; const r=b.dataset.r, step=Math.PI/6;
+  if(r==='spin'){ spin=!spin; b.classList.toggle('on',spin); return; }
+  if(r==='reset'){ cam.position.copy(homeView.pos); cam.up.copy(homeView.up); controls.target.copy(homeView.target); model.holder.rotation.y=homeView.rotY; cam.lookAt(controls.target); return; }
+  spin=false; spinBtn().classList.remove('on');
+  if(r==='left') rotateView('y', -step); if(r==='right') rotateView('y', step);
+  if(r==='up') rotateView('x', step); if(r==='down') rotateView('x', -step);
+};
 function loop(){ requestAnimationFrame(loop); if(spin && model && model.dim===3) model.holder.rotation.y += .004; controls.update(); renderer.render(scene,cam); }
 loop();
 
@@ -341,9 +363,9 @@ function select(id){
   const hasDrawing=!!c.shapes;
   renderer.domElement.style.display = hasDrawing?'block':'none';
   $('mapwrap').style.display = hasDrawing?'none':'flex';
-  $('hint').style.display = hasDrawing?'block':'none';
+  $('hint').style.display = hasDrawing?'block':'none'; $('viewbtns').style.display = hasDrawing?'flex':'none';
   $('tip').style.display='none';
-  if(hasDrawing){ buildModel(c); spin=true; resize(); controls.handleResize(); } else { model=null; drawMap(c); }
+  if(hasDrawing){ buildModel(c); spin = c.dim===3; spinBtn().classList.toggle('on',spin); spinBtn().style.display = c.dim===3?'':'none'; resize(); controls.handleResize(); } else { model=null; drawMap(c); }
 
   let html=`<div class="title2"><h2>${c.id}</h2><span class="badge" style="color:${st.c};border-color:${st.c}">${st.label}</span>${c.a1?`<span class="a1">Appendix A.1 #${c.a1}</span>`:''}</div>
   <div class="summary">${c.summary}</div>`;
