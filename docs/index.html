@@ -378,7 +378,7 @@ function select(id){
     <details><summary>Witness points (one exact point per codeword)</summary><pre>${Object.entries(c.witness).map(([w,p])=>`${w.padEnd(5)} (${p.join(', ')})`).join('\n')}</pre></details>`;
   } else {
     html+=`<div class="wit" id="wit"></div>`;
-    if(c.proof) html+=`<div class="lbl">Proof (Prabhakar 2026; reproduced here)</div><ol class="proof">${c.proof.map(p=>`<li>${p}</li>`).join('')}</ol>`;
+    if(c.proof) html+=`<div class="lbl">${c.summary.includes('New result')?'Proof (new, Nov 2026; full write-up in docs/proofs.md)':'Proof (Prabhakar 2026; reproduced here)'}</div><ol class="proof">${c.proof.map(p=>`<li>${p}</li>`).join('')}</ol>`;
     if(c.tried) html+=`<div class="lbl">What we tried</div><ul class="tried">${c.tried.map(t=>`<li>${t}</li>`).join('')}</ul>`;
     html+=`<div class="lbl">Codewords</div><div class="summary">${c.codewords.join('  ')}</div>`;
   }
@@ -400,8 +400,8 @@ window.READY=true;
 <h3>About this project</h3>
 <p>A neural code is a list of which neurons fire together. Place cells in the brain each fire when an animal is in one patch of space, called its place field. If every place field is a convex shape (no dents or holes), the code that comes out is called convex. Researchers want to know which codes can come from convex place fields and which can't.</p>
 <p>In 2025, Ahmed, Crepeau, Flores, Isekenegbe, Perez and Shiu pointed to 96 small codes, each with 6 neurons and 5 maximal codewords, whose convexity nobody knew (Remark 2.33 of arXiv:2510.20323, building on the Wheels paper of Ruys de Perez, Matusevich and Shiu). This site shows where each of the 96 stands.</p>
-<p>For 78 of them I found actual drawings: convex shapes that produce exactly the right code, each one checked exactly by computer. 63 fit in the plane. 14 cannot fit in the plane at all (I prove this with Jeffs' sunflower theorem) but do fit in 3D, so they need exactly three dimensions. Three codes are not convex, first shown by Prayagh Prabhakar in 2026 and reproduced here. 15 are still open.</p>
-<p>Right now I'm working on a new kind of argument that could prove some of the open codes are not convex, since none of the known tests apply to them. Every drawing on this site comes with its exact numbers, so anyone can check the results themselves.</p>
+<p>For 80 of them I found actual drawings: convex shapes that produce exactly the right code, each one checked exactly by computer. 63 fit in the plane. 16 cannot fit in the plane at all (I prove this with Jeffs' sunflower theorem) but do fit in 3D, so they need exactly three dimensions. Nine codes are not convex. Three of those were first shown by Prayagh Prabhakar in 2026 and are reproduced here, and the other six are new. 7 are still open.</p>
+<p>The six new ones come from two new arguments, the Rim rule and the Six-Role Wall, and the full proofs are on GitHub in docs/proofs.md. Every drawing on this site comes with its exact numbers, so anyone can check the results themselves.</p>
 </template>
 </body>
 </html>

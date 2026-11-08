@@ -2738,7 +2738,7 @@
      6
     ]
    ],
-   "status": "open"
+   "status": "not convex"
   },
   {
    "id": "C5-034",
@@ -3159,7 +3159,7 @@
      6
     ]
    ],
-   "status": "open"
+   "status": "convex (needs exactly 3D)"
   },
   {
    "id": "C5-039",
@@ -4461,7 +4461,7 @@
      6
     ]
    ],
-   "status": "open"
+   "status": "not convex"
   },
   {
    "id": "C5-054",
@@ -5006,7 +5006,7 @@
      6
     ]
    ],
-   "status": "open"
+   "status": "convex (needs exactly 3D)"
   },
   {
    "id": "C5-060",
@@ -6217,7 +6217,7 @@
      6
     ]
    ],
-   "status": "open"
+   "status": "not convex"
   },
   {
    "id": "C5-073",
@@ -6603,7 +6603,7 @@
      6
     ]
    ],
-   "status": "open"
+   "status": "not convex"
   },
   {
    "id": "C5-077",
@@ -7436,7 +7436,7 @@
      6
     ]
    ],
-   "status": "open"
+   "status": "not convex"
   },
   {
    "id": "C5-086",
@@ -8512,7 +8512,7 @@
      6
     ]
    ],
-   "status": "open"
+   "status": "not convex"
   },
   {
    "id": "C5-096",
