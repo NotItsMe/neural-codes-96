@@ -108,7 +108,7 @@ ul.tried,ol.proof{margin:6px 0 2px 0;padding-left:20px;font-size:13px;line-heigh
       <select id="mobilePick"></select>
       <div id="mapwrap"><div id="maptip"></div><svg id="map"></svg></div>
       <div id="tip"></div>
-      <div id="hint">drag to rotate · scroll to zoom · click a region</div>
+      <div id="hint">drag to spin any direction · right-drag to move · scroll to zoom · click a region or a codeword chip · click empty space to clear</div>
     </div>
     <div id="bar"></div>
   </div>
@@ -118,7 +118,7 @@ ul.tried,ol.proof{margin:6px 0 2px 0;padding-left:20px;font-size:13px;line-heigh
 
 <script type="module">
 import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
 
 const NEURON = ['#22D3EE','#E879F9','#A3E635','#FBBF24','#FB7185','#818CF8'];
 const STATUS = {
@@ -176,13 +176,14 @@ const cam = new THREE.PerspectiveCamera(40, 1, .05, 200);
 scene.add(new THREE.AmbientLight(0xffffff,.6));
 const sun = new THREE.DirectionalLight(0xffffff,1.0); sun.position.set(6,10,8); scene.add(sun);
 const grid = new THREE.GridHelper(16, 32, 0x334155, 0x1e293b); scene.add(grid);
-const controls = new OrbitControls(cam, renderer.domElement);
-controls.enableDamping = true; controls.autoRotate = true; controls.autoRotateSpeed = .8;
-controls.addEventListener('start', ()=>{ controls.autoRotate=false; });
+const controls = new TrackballControls(cam, renderer.domElement);
+controls.rotateSpeed = 3; controls.zoomSpeed = 1.2; controls.panSpeed = .6; controls.dynamicDampingFactor = .15;
+let spin = true;
+controls.addEventListener('start', ()=>{ spin=false; });
 let world = new THREE.Group(); scene.add(world);
 let regionObjs = {}, hlObj = null, witnessObj = null, model = null; // model: {code, dim, toWorld}
 
-function resize(){ const r=stage.getBoundingClientRect(); renderer.setSize(r.width, r.height, false); cam.aspect=r.width/Math.max(1,r.height); cam.updateProjectionMatrix(); }
+function resize(){ const r=stage.getBoundingClientRect(); controls?.handleResize?.(); renderer.setSize(r.width, r.height, false); cam.aspect=r.width/Math.max(1,r.height); cam.updateProjectionMatrix(); }
 new ResizeObserver(resize).observe(stage);
 
 function blend(word){
@@ -226,6 +227,7 @@ function buildModel(code){
   const scale = 5/Math.max(size.x,size.y,size.z||0.001);
   inner.position.copy(c).multiplyScalar(-1);
   const holder=new THREE.Group(); holder.add(inner); world.add(holder); holder.scale.setScalar(scale);
+  cam.up.set(0,1,0);
   if(dim===2){ holder.rotation.x=-Math.PI/2; holder.position.y=.02; cam.position.set(0,9.5,3.2); controls.target.set(0,0,0); }
   else { holder.position.y=size.y*scale/2+.05; cam.position.set(7,5.4,7.6); controls.target.set(0,size.y*scale/2,0); }
   controls.update();
@@ -308,7 +310,7 @@ renderer.domElement.addEventListener('pointerup', e=>{
 });
 
 let hidden=new Set();
-function loop(){ requestAnimationFrame(loop); controls.update(); renderer.render(scene,cam); }
+function loop(){ requestAnimationFrame(loop); if(spin && model && model.dim===3) model.holder.rotation.y += .004; controls.update(); renderer.render(scene,cam); }
 loop();
 
 /* ---------- codeword map (no drawing) ---------- */
@@ -341,7 +343,7 @@ function select(id){
   $('mapwrap').style.display = hasDrawing?'none':'flex';
   $('hint').style.display = hasDrawing?'block':'none';
   $('tip').style.display='none';
-  if(hasDrawing){ buildModel(c); controls.autoRotate=true; resize(); } else { model=null; drawMap(c); }
+  if(hasDrawing){ buildModel(c); spin=true; resize(); controls.handleResize(); } else { model=null; drawMap(c); }
 
   let html=`<div class="title2"><h2>${c.id}</h2><span class="badge" style="color:${st.c};border-color:${st.c}">${st.label}</span>${c.a1?`<span class="a1">Appendix A.1 #${c.a1}</span>`:''}</div>
   <div class="summary">${c.summary}</div>`;
