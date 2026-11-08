@@ -21,7 +21,7 @@ DATA = os.path.join(HERE, "..", "data")
 
 
 def load(cid):
-    for suffix in ("_3D", "_D8", ""):
+    for suffix in ("_4D", "_3D", "_D8", ""):
         path = os.path.join(DATA, "certificates", f"{cid}{suffix}.json")
         if os.path.exists(path):
             d = json.load(open(path))

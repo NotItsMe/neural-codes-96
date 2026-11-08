@@ -5107,7 +5107,7 @@
      6
     ]
    ],
-   "status": "open"
+   "status": "convex (needs exactly 3D)"
   },
   {
    "id": "C5-061",
@@ -5787,7 +5787,7 @@
      6
     ]
    ],
-   "status": "open"
+   "status": "convex (3D; plane open)"
   },
   {
    "id": "C5-068",
@@ -5951,7 +5951,7 @@
      6
     ]
    ],
-   "status": "open"
+   "status": "convex (needs exactly 3D)"
   },
   {
    "id": "C5-070",
@@ -7552,7 +7552,7 @@
      6
     ]
    ],
-   "status": "open"
+   "status": "convex (4D; 3D open)"
   },
   {
    "id": "C5-087",
@@ -8406,7 +8406,7 @@
      5
     ]
    ],
-   "status": "open"
+   "status": "convex (needs exactly 3D)"
   },
   {
    "id": "C5-095",
