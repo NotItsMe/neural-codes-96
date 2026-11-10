@@ -157,7 +157,7 @@ def mandatory_faces(facet_set):
     """
     Nonempty faces whose link is not contractible.
     Only intersections of facets can be mandatory (any other face has a cone link),
-    so we test just those (plus facets, which are always mandatory).
+    so I test just those (plus facets, which are always mandatory).
     """
     mand = set(facet_set)
     for sigma in facet_intersections(facet_set):

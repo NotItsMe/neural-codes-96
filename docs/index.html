@@ -381,7 +381,7 @@ function select(id){
     html+=`<div class="wit" id="wit"></div>`;
     if(c.drawing4d) html+=`<div class="lbl">The 4D drawing (coordinates x, y, z, w)</div><ol class="proof">${c.drawing4d.map(p=>`<li>${p}</li>`).join('')}</ol><div class="verify">Verify: <code>python3 checker/verify.py ${c.id}</code></div>`;
     if(c.proof) html+=`<div class="lbl">${c.summary.includes('New result')?'Proof (new, Nov 2026; full write-up in docs/proofs.md)':'Proof (Prabhakar 2026; reproduced here)'}</div><ol class="proof">${c.proof.map(p=>`<li>${p}</li>`).join('')}</ol>`;
-    if(c.tried) html+=`<div class="lbl">What we tried</div><ul class="tried">${c.tried.map(t=>`<li>${t}</li>`).join('')}</ul>`;
+    if(c.tried) html+=`<div class="lbl">What I tried</div><ul class="tried">${c.tried.map(t=>`<li>${t}</li>`).join('')}</ul>`;
     html+=`<div class="lbl">Codewords</div><div class="summary">${c.codewords.join('  ')}</div>`;
   }
   $('bar').innerHTML=html;

@@ -2,7 +2,7 @@
 
 **Interactive viewer:** https://notitsme.github.io/neural-codes-96/ (click through all 96 codes; the 3D codes will spin)
 
-When a rat, or another animal, walks into a room, some neurons fire when it is in a single specific spot. These are known as place cells. Each cell has its own location and that cell will fire when an animal is in its place field. You can then build a code by looking at which neurons are active together. If the code can come from one region per neuron with no dents or holes, then it is considered to be convex. We can thus ask the question: can this code be made into convex sets? In this case, for some of the smaller codes, nobody knew.
+When a rat, or another animal, walks into a room, some neurons fire when it is in a single specific spot. These are known as place cells. Each cell has its own location and that cell will fire when an animal is in its place field. You can then build a code by looking at which neurons are active together. If the code can come from one region per neuron with no dents or holes, then it is considered to be convex. This raises the question: can this code be made into convex sets? In this case, for some of the smaller codes, nobody knew.
 
 In 2025, Ahmed, Crepeau, Flores, Isekenegbe, Perez and Shiu pointed to 96 small codes (6 neurons, 5 maximal codewords each) whose convexity was previously unknown (Remark 2.33 of [arXiv:2510.20323](https://arxiv.org/abs/2510.20323), from Table 1 of the wheels paper by Ruys de Perez, Matusevich and Shiu, [arXiv:2108.04995](https://arxiv.org/abs/2108.04995)). This repo settles all 96 of those codes.
 
@@ -30,7 +30,7 @@ There are 19 codes with 3 regions which only overlap inside a shared codeword re
 
 ### Non-convex
 
-C5-044, C5-047 and C5-050 were first proven non-convex by Prayagh Prabhakar (S.-T. Yau High School Science Award, 2026) with his absorption criterion. We reimplemented that criterion independently, with a second proof.
+C5-044, C5-047 and C5-050 were first proven non-convex by Prayagh Prabhakar (S.-T. Yau High School Science Award, 2026) with his absorption criterion. I reimplemented that criterion independently, with a second proof.
 
 The other eight (November 2026) are new results: written out in [docs/proofs.md](docs/proofs.md).
 
