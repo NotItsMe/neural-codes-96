@@ -13,7 +13,7 @@ Procedure: choose k base codewords (their witness points span a flat of dim <= k
 codeword forced on a segment between two points already in the flat. If every facet gets reached, then
 C convex  =>  C convex in R^(k-1).    bound(C) = smallest such k-1 over all base sets.
 """
-import json, sys
+import os, json, sys
 from itertools import combinations
 
 
@@ -75,7 +75,7 @@ def bound(codewords, maxk=6):
 
 
 if __name__ == "__main__":
-    codes = {c["id"]: c for c in json.load(open("/home/claude/jeffs_96_codes.json"))["codes"]}
+    codes = {c["id"]: c for c in json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "codes.json")))["codes"]}
     for cid in sys.argv[1:] or sorted(codes):
         d, base = bound(codes[cid]["codewords"])
         print(cid, d, base, flush=True)

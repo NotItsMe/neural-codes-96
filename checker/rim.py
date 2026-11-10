@@ -5,7 +5,7 @@ Neurons i,j,k,l,m (i!=j, k!=l). If
   (3) codewords A (i,m in A, j not), B (j,m in B, i not), Z (i,j,m in Z)
   (4) no codeword contains (A&B) | {i,j}
 then the code is NOT convex (any dimension)."""
-import json, sys
+import os, json, sys
 from itertools import permutations
 def rim(code):
     code=[frozenset(w) for w in code]
@@ -28,7 +28,7 @@ def rim(code):
                                 hits.append(dict(i=i,j=j,k=k,l=l,m=m,A=''.join(map(str,sorted(A))),B=''.join(map(str,sorted(B))),Z=''.join(map(str,sorted(Z[0])))))
     return hits
 if __name__=="__main__":
-    codes=json.load(open("jeffs_96_codes.json"))["codes"]
+    codes=json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "codes.json")))["codes"]
     for c in codes:
         h=rim([set(map(int,w)) if isinstance(w,str) else set(w) for w in c["codewords"]])
         if h: print(c["id"],len(h),h[0])

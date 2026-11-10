@@ -6,7 +6,7 @@ PLANAR-ONLY test: if roles (o,i,j,p,q,b) satisfy W1..W9 the code has no convex d
  W6 some codeword ⊇{o,p,b}; none ⊇{o,p,b,i}  W7 some codeword ⊇{b,i,j} without p
  W8 every codeword with b and (i or j) has both i and j
  W9 no codeword ⊇{b,p,i,j}"""
-import json, sys
+import os, json, sys
 from itertools import permutations
 def wall(code):
     code=[frozenset(w) for w in code]; N=sorted(set().union(*code)); hits=[]
@@ -25,6 +25,6 @@ def wall(code):
         hits.append((o,i,j,p,q,b))
     return hits
 if __name__=="__main__":
-    for c in json.load(open("jeffs_96_codes.json"))["codes"]:
+    for c in json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "codes.json")))["codes"]:
         h=wall(c["codewords"])
         if h: print(c["id"],len(h),h[0])
