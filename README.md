@@ -68,10 +68,14 @@ The checker goes through every set of neurons with exact rational arithmetic and
 
 All 96 codes have been finalised; 85 are convex and 11 are non-convex. What's left is the question of whether C5-011 and C5-067 can be drawn in the plane (2D) and whether C5-086 can be drawn in 3D or whether its minimal dimension is 4D.
 
-Nov 7, 2026 results fingerprint (78 convex, 3 non-convex): `sha256 3bce792c2f3a20317ebd07bfb4aa7b0a29128851686689bd8930d6ba9c699c5f`
-Nov 8, 2026 results fingerprint (85 convex, 11 non-convex): `sha256 a1004364ca0a9b755fa4359a7d16fa020d05e72fbe18ded909fc5750c6dbc1e2`
-** files are in the Releases tab
+## Fingerprints
+- Nov 7, 2026 results fingerprint (78 convex, 3 non-convex): `sha256 3bce792c2f3a20317ebd07bfb4aa7b0a29128851686689bd8930d6ba9c699c5f`
+- Nov 8, 2026 results fingerprint (85 convex, 11 non-convex): `sha256 a1004364ca0a9b755fa4359a7d16fa020d05e72fbe18ded909fc5750c6dbc1e2`
 
+Files are in the [Releases tab](https://github.com/NotItsMe/neural-codes-96/releases)
+
+
+## How this was made
 AI tools (mostly Anthropic's Claude, bit of Google's Gemini) helped me set up this repo as well as ran the searches that found the drawings. It helped with coming up with proofs for proving the 11 codes non-convex. I decided what results got tested and when a result was fully done, as well as checked every proof myself. I also designed the look of the 3D viewer and wrote all of the published text in this repo.
 
 Zaid Mohammed
